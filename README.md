@@ -12,12 +12,12 @@ SPICE Toolkit (Mice for MATLAB): Essential for all ephemeris and astronomical ca
 Custom N-Body Functions: External functions (nbody_init, nbody_rhs)  
 
 
-## ️ Operating Principle and Optimization Flow  
+## ️Operating Principle and Optimization Flow  
 The script uses fmincon (configured with the active-set algorithm) to iteratively search for the optimal trajectory.  
 1. Initialization and SetupData Loading: SPICE kernels (LSK, SPK, PCK) for Earth, Moon, Sun, and Apophis are loaded.  
 Mission Constants: Physical parameters are defined, including  
 Asteroid Mass ($M_{\text{ast}}$)  
-Specific Impulse ($I_{\text{sp}}$) 
+Specific Impulse ($I_{\text{sp}}$)  
 Momentum Enhancement Factor ($\beta$)  
 Time Windows: Mission time constraints are established: Launch Window ($LWO, LWC$) and Impact Window (IMPS, IMPF).  
 
@@ -33,10 +33,11 @@ Multiple Shooting Node: State vectors:  $\mathbf{x}_2$ (at DSM) and  $\mathbf{x}
 Bounded by solar system dimensions (±Rl​) and max velocity (±100 km/s).  
 
 3. Objective and Constraints  
+ 
 A. Objective Function (objFunMultipleShoot_parametric_alpha)  
 The goal is to maximize the TCA distance ($d_{\text{TCA}}$) between the deflected asteroid and Earth.  
 $$\min \left[ f(\mathbf{X}) = -d_{\text{TCA, after impact}} \right]$$  
-The function calculates the fuel consumption ($\Delta v_2$), determines the impact mass ($m_{\text{sc\_impact}}$), and computes the dynamic momentum coefficient,   
+The function calculates the fuel consumption ($\Delta v_2$), determines the impact mass , and computes the dynamic momentum coefficient,   
  and finally propagates the resulting post-impact asteroid trajectory to find the actual minimum distance to Earth.  
 
 B. Nonlinear Constraints (nonlinconstMultipleShoot_parametric_alpha)
