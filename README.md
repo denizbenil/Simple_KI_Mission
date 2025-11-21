@@ -1,4 +1,4 @@
-#🚀 README: Apophis Planetary Defense Mission Optimization  
+## README: Apophis Planetary Defense Mission Optimization  
 
 This repository contains the MATLAB script (MultipleShooting_fmincon.m) used for optimizing a kinetic impactor mission to deflect the Apophis (20099942) asteroid.  
 The optimization employs the Multiple Shooting Method and Parametric Time Variables ($\alpha_0, \alpha_1, \text{TOF}$) to solve a complex interplanetary trajectory problem;  
@@ -16,25 +16,27 @@ Custom N-Body Functions: External functions (nbody_init, nbody_rhs)
 The script uses fmincon (configured with the active-set algorithm) to iteratively search for the optimal trajectory.  
 1. Initialization and SetupData Loading: SPICE kernels (LSK, SPK, PCK) for Earth, Moon, Sun, and Apophis are loaded.  
 Mission Constants: Physical parameters are defined, including  
-Asteroid Mass ($\text{M}_{\text{ast}}$)  
-Specific Impulse ($\text{I}_{\text{sp}}$)  
+Asteroid Mass ($M_{\text{ast}}$)  
+Specific Impulse ($I_{\text{sp}}$) 
 Momentum Enhancement Factor ($\beta$)  
 Time Windows: Mission time constraints are established: Launch Window ($LWO, LWC$) and Impact Window (IMPS, IMPF).  
 
 2. Decision Variables (19 Total)The optimization vector $\mathbf{X}$ is composed of three main groups:  
-Variables,Count,Description,"Example Range (lb,ub)"  
+Variables,Count,Description,"Example Range (LB - Lower Bound,UB - Upper Bound)"  
 Time Parameters: "α0​ (Launch time fraction), α1​ (DSM time fraction), TOF (Total Flight Time)."  
-"αi​∈[0,0.9], TOF∈[1000,2000] days"  
-Launch Parameters: "Hyperbolic Excess Velocity (Δv0​), In-plane/Out-of-plane angles (α,δ), initial S/C mass (msc0​)."  
-"Δv0​∈[1.5,5.5] km/s  
-msc0​∈[100,3000] kg"  
-Multiple Shooting Node: State vectors: x2​ (at DSM) and x3​ (at Impact).,Bounded by solar system dimensions (±Rl​) and max velocity (±100 km/s).  
+αi​∈[0,0.9]  
+TOF∈[1000,2000] days  
+Launch Parameters: Spherical Angles angles (α,δ)  
+Launch Delta -V Δv0​∈[1.5,5.5] km/s  
+Initial S/C mass msc0​∈[100,3000] kg  
+Multiple Shooting Node: State vectors:  $\mathbf{x}_2$ (at DSM) and  $\mathbf{x}_3$ (at Impact).  
+Bounded by solar system dimensions (±Rl​) and max velocity (±100 km/s).  
 
 3. Objective and Constraints  
 A. Objective Function (objFunMultipleShoot_parametric_alpha)  
 The goal is to maximize the TCA distance ($d_{\text{TCA}}$) between the deflected asteroid and Earth.  
 $$\min \left[ f(\mathbf{X}) = -d_{\text{TCA, after impact}} \right]$$  
-The function calculates the fuel consumption ($\Delta v_2$), determines the impact mass ($m_{\text{sc\_impact}}$), computes the dynamic momentum coefficient,  
+The function calculates the fuel consumption ($\Delta v_2$), determines the impact mass ($m_{\text{sc\_impact}}$), and computes the dynamic momentum coefficient,   
  and finally propagates the resulting post-impact asteroid trajectory to find the actual minimum distance to Earth.  
 
 B. Nonlinear Constraints (nonlinconstMultipleShoot_parametric_alpha)
